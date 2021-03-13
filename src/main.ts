@@ -5,12 +5,22 @@ const prisma = new PrismaClient();
 
 // main function
 async function main() {
+  const email = "ops@cubetiqs.com";
+  const name = "CUBETIQ Solution";
+
   // create user
-  await createUser()
+  await createUser(
+    {
+      name: name,
+      email: email,
+    }
+  )
     .then((user) => {
       if (user != null) {
         // create profile for user
-        createProfile(user);
+        createProfile(user, {
+          bio: "Software Developer",
+        });
       }
     })
     .catch((e) => {

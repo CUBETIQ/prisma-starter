@@ -1,9 +1,11 @@
 import { PrismaClient, User } from "@prisma/client";
+import ProfileRequest from "../Model/ProfileRequest";
+import UserRequest from "../Model/UserRequest";
 
 const prisma = new PrismaClient();
 
-async function isProfileExistByEmail(email: string) {
-  const exist = await prisma.profile.count({
+function isProfileExistByEmail(email: string) {
+  const exist = prisma.profile.count({
     where: {
       user: {
         email: email,
@@ -11,7 +13,7 @@ async function isProfileExistByEmail(email: string) {
     },
   });
 
-  return exist > 0;
+  return exist.then((c) => c > 0).catch((e) => 0);
 }
 
 async function findOneProfileByEmail(email: string) {
@@ -21,19 +23,22 @@ async function findOneProfileByEmail(email: string) {
         email: email,
       },
     },
+    include: {
+      user: true,
+    },
   });
 
   return profile;
 }
 
-async function isExistByEmail(email: string) {
-  const exist = await prisma.user.count({
+function isExistByEmail(email: string) {
+  const exist = prisma.user.count({
     where: {
       email: email,
     },
   });
 
-  return exist > 0;
+  return exist.then((c) => c > 0).catch((e) => 0);
 }
 
 async function findOneByEmail(
@@ -53,18 +58,15 @@ async function findOneByEmail(
   return user;
 }
 
-async function createUser() {
-  const email = "ops@cubetiqs.com";
-
-  if (isExistByEmail(email)) {
-    console.log("User existed with email => ", email);
-    return findOneByEmail(email);
+async function createUser(request: UserRequest) {
+  if (isExistByEmail(request.email)) {
+    return findOneByEmail(request.email);
   }
 
   const user = await prisma.user.create({
     data: {
-      name: "CUBETIQ Solution",
-      email: email,
+      name: request.name,
+      email: request.email,
     },
   });
 
@@ -73,16 +75,15 @@ async function createUser() {
   return user;
 }
 
-async function createProfile(user: User) {
+async function createProfile(user: User, request: ProfileRequest) {
   if (isProfileExistByEmail(user.email)) {
-    console.log("Profile existed by email => ", user.email);
     return findOneProfileByEmail(user.email);
   }
 
   const profile = await prisma.profile.create({
     data: {
       userId: user.id,
-      bio: "Software Company",
+      bio: request.bio,
     },
   });
 
@@ -91,4 +92,4 @@ async function createProfile(user: User) {
   return profile;
 }
 
-export { createUser, createProfile };
+export { createUser, createProfile, findOneByEmail, findOneProfileByEmail };
