@@ -1,0 +1,20 @@
+{
+  "name": "prisma-starter",
+  "license": "MIT",
+  "main": "main.ts",
+  "devDependencies": {
+    "prisma": "2.18.0",
+    "ts-node": "9.1.1",
+    "typescript": "4.2.3"
+  },
+  "scripts": {
+    "dev": "ts-node ./src/main.ts",
+    "migrate": "prisma migrate dev --name add-profile --preview-feature"
+  },
+  "dependencies": {
+    "@prisma/client": "2.18.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}
