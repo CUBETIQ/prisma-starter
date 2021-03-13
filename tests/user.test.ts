@@ -1,9 +1,12 @@
+import { PrismaClient } from "@prisma/client";
 import {
   createUser,
   findOneByEmail,
   createProfile,
   findOneProfileByEmail,
 } from "../src/User/UserService";
+
+const prisma = new PrismaClient();
 
 // all tests about user
 describe("user", function () {
@@ -18,7 +21,7 @@ describe("user", function () {
       email: email,
       name: name,
     })
-      .then((user) => {
+      .then(async (user) => {
         if (user == null) {
           throw Error("user is null");
         }
@@ -28,7 +31,7 @@ describe("user", function () {
         expect(name).toBe(user.name);
 
         // create profile
-        createProfile(user, {
+        await createProfile(user, {
           bio: "Software Developer",
         })
           .then((profile) => {
@@ -39,9 +42,11 @@ describe("user", function () {
             expect(profile).not.toBeNull();
             expect(bio).toBe(profile.bio);
           })
-          .catch((e) => console.error(e));
+          .catch((e) => console.error(e))
+          .finally(() => done());
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.error(e))
+      .finally(() => done());
   });
 
   // check user test
@@ -56,9 +61,8 @@ describe("user", function () {
         expect(email).toBe(user.email);
         expect(name).toBe(user.name);
       })
-      .catch((e) => console.error(e));
-
-    done();
+      .catch((e) => console.error(e))
+      .finally(() => done());
   });
 
   // check profile included user test
@@ -74,8 +78,16 @@ describe("user", function () {
         expect(email).toBe(profile.user.email);
         expect(name).toBe(profile.user.name);
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.error(e))
+      .finally(() => done());
+  });
+
+  // try to finish
+  afterAll(async (done) => {
+    await prisma.$disconnect();
 
     done();
   });
+
+  // after all
 });

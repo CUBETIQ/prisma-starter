@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "ts-node ./src/main.ts",
     "migrate": "prisma migrate dev --name add-profile --preview-feature",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "@prisma/client": "2.18.0"
