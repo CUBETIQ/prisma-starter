@@ -1,0 +1,11 @@
+kind: pipeline
+type: docker
+name: ci
+
+steps:
+  - name: test
+  - image: node
+  - command:
+    - yarn
+    - yarn migrate
+    - yarn test
