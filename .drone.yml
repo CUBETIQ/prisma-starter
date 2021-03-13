@@ -4,8 +4,8 @@ name: ci
 
 steps:
   - name: test
-  - image: node
-  - command:
-    - yarn
-    - yarn migrate
-    - yarn test
+    image: node
+    commands:
+      - yarn
+      - yarn migrate
+      - yarn test
