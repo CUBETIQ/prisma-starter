@@ -5,10 +5,9 @@ name: ci
 platform:
   os: darwin
   arch: amd64
-  
+
 steps:
   - name: test
-    image: node
     commands:
       - yarn
       - yarn migrate
