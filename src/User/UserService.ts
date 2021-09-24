@@ -4,8 +4,8 @@ import UserRequest from "../Model/UserRequest";
 
 const prisma = new PrismaClient();
 
-function isProfileExistByEmail(email: string) {
-  const exist = prisma.profile.count({
+async function isProfileExistByEmail(email: string) {
+  const exist = await prisma.profile.count({
     where: {
       user: {
         email: email,
@@ -13,7 +13,7 @@ function isProfileExistByEmail(email: string) {
     },
   });
 
-  return exist.then((c) => c > 0).catch((e) => 0);
+  return exist > 0;
 }
 
 async function findOneProfileByEmail(email: string) {
@@ -30,15 +30,15 @@ async function findOneProfileByEmail(email: string) {
 
   return profile;
 }
-
-function isExistByEmail(email: string) {
-  const exist = prisma.user.count({
+ 
+async function isExistByEmail(email: string) {
+  const exist = await prisma.user.count({
     where: {
       email: email,
     },
   });
 
-  return exist.then((c) => c > 0).catch((e) => 0);
+  return exist > 0;
 }
 
 async function findOneByEmail(
@@ -59,7 +59,7 @@ async function findOneByEmail(
 }
 
 async function createUser(request: UserRequest) {
-  if (isExistByEmail(request.email)) {
+  if (await isExistByEmail(request.email)) {
     return findOneByEmail(request.email);
   }
 
@@ -76,7 +76,7 @@ async function createUser(request: UserRequest) {
 }
 
 async function createProfile(user: User, request: ProfileRequest) {
-  if (isProfileExistByEmail(user.email)) {
+  if (await isProfileExistByEmail(user.email)) {
     return findOneProfileByEmail(user.email);
   }
 

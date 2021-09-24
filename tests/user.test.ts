@@ -15,13 +15,13 @@ describe("user", function () {
   const bio = "Software Developer";
 
   // create user test
-  it("createUser", async (done) => {
+  it("createUser", (done) => {
     // create user
-    await createUser({
+    createUser({
       email: email,
       name: name,
     })
-      .then(async (user) => {
+      .then((user) => {
         if (user == null) {
           throw Error("user is null");
         }
@@ -31,7 +31,7 @@ describe("user", function () {
         expect(name).toBe(user.name);
 
         // create profile
-        await createProfile(user, {
+        createProfile(user, {
           bio: "Software Developer",
         })
           .then((profile) => {
@@ -50,8 +50,8 @@ describe("user", function () {
   });
 
   // check user test
-  it("checkUser", async (done) => {
-    await findOneByEmail(email)
+  it("checkUser", (done) => {
+    findOneByEmail(email)
       .then((user) => {
         if (user == null) {
           throw Error("user is null");
@@ -66,8 +66,8 @@ describe("user", function () {
   });
 
   // check profile included user test
-  it("checkProfileUser", async (done) => {
-    await findOneProfileByEmail(email)
+  it("checkProfileUser", (done) => {
+    findOneProfileByEmail(email)
       .then((profile) => {
         if (profile == null) {
           throw Error("profile is null");
@@ -83,8 +83,8 @@ describe("user", function () {
   });
 
   // try to finish
-  afterAll(async (done) => {
-    await prisma.$disconnect();
+  afterAll((done) => {
+    prisma.$disconnect();
 
     done();
   });
