@@ -4,7 +4,7 @@ name: ci
 
 steps:
   - name: test
-    image: node
+    image: d.ctdn.net/node
     commands:
       - yarn
       - yarn migrate
