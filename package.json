@@ -3,7 +3,7 @@
   "license": "MIT",
   "main": "main.ts",
   "devDependencies": {
-    "@types/jest": "^28.1.0",
+    "@types/jest": "^29.0.0",
     "jest": "^27.2.1",
     "prisma": "^4.0.0",
     "ts-jest": "^27.0.5",
